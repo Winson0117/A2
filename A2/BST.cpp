@@ -258,6 +258,58 @@ void BST::case3(BTNode *cur) {
 	free(is);
 }
 
+//function for assignment
+
+
+
+//(d) clone subtree
+/*bool BST::CloneSubtree(BST t1, type item) {
+	BTNode	*subRoot;
+
+	if (t1.root == NULL) return false;			
+
+	subRoot = search2(t1.root, item);		
+	if (subRoot == NULL) return false;		
+
+	if (root != NULL) clear();			
+
+	root = clone2(subRoot);					
+	count = 0;
+	countNode2(root, count);				
+	return true;
+}
+
+
+BTNode *BST::search2(BTNode *cur, type item) {
+	if (cur == NULL) return NULL;			
+
+	//if (cur->item == item)
+	if (cur->item.compare2(item)) return cur;	
+
+	//if (cur->item > item)
+	if (cur->item.compare1(item))				
+		return search2(cur->left, item);
+
+	return search2(cur->right, item);			
+}
+
+
+BTNode *BST::clone2(BTNode *cur) {
+	BTNode	*newNode;
+
+	if (cur == NULL) return NULL;
+
+	newNode = new BTNode(cur->item);		
+	if (!newNode) return NULL;
+	newNode->left = clone2(cur->left);			
+	newNode->right = clone2(cur->right);
+	return newNode;
+}
+*/
+
+
+
+
 
 
 

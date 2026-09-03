@@ -10,9 +10,10 @@ Tutor:
 
 Group Member 2:
 
-Name: 
-Student ID:
-Course:
-Practical Session: 
-Tutor:
+Name: Phon Kar Lok
+Student ID: 2500809 
+Course: CS
+Practical Session: Monday, 8AM - 10AM
+Practical Group: P5
+Tutor: Ts Dr.Goh Chuan Meng
 

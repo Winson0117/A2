@@ -13,6 +13,32 @@ BST::BST() {
 }
 
 
+BST::BST(const BST &other) {
+	// Make an independent copy so passing a BST by value is safe.
+	root = cloneNode(other.root);
+	count = other.count;
+}
+
+
+BST &BST::operator=(const BST &other) {
+	if (this != &other) {
+		BTNode *newRoot = cloneNode(other.root);
+		clear(root);
+		root = newRoot;
+		count = other.count;
+	}
+	return *this;
+}
+
+
+BST::~BST() {
+	// Release every dynamically allocated node when the tree goes out of scope.
+	clear(root);
+	root = NULL;
+	count = 0;
+}
+
+
 bool BST::empty() {
 	if (count == 0) return true;
 	return false;
@@ -81,11 +107,11 @@ int BST::countNode() {
 }
 
 
-void BST::countNode2(BTNode *cur, int &count) {
+void BST::countNode2(BTNode *cur, int &nodeCount) {
 	if (cur == NULL) return;
-	countNode2(cur->left, count);
-	countNode2(cur->right, count);
-	count++;
+	countNode2(cur->left, nodeCount);
+	countNode2(cur->right, nodeCount);
+	nodeCount++;
 }
 
 
@@ -214,7 +240,7 @@ void BST::case2(BTNode *pre, BTNode *cur) {
 		else
 			root = cur->right;
 
-		free(cur);
+		delete cur;
 		return;
 	}
 
@@ -231,7 +257,7 @@ void BST::case2(BTNode *pre, BTNode *cur) {
 			pre->left = cur->left;
 	}
 
-	free(cur);					// remove item
+	delete cur;					// remove item
 }
 
 
@@ -255,60 +281,117 @@ void BST::case3(BTNode *cur) {
 		isFather->left = is->right;	// case 2: There is IS_Father
 
 	// remove IS Node
-	free(is);
+	delete is;
 }
 
-//function for assignment
+int BST::height(BTNode *cur) const {
+	if (cur == NULL) return 0;
+	return 1 + max(height(cur->left), height(cur->right));
+}
 
+void BST::display2(BTNode *cur, int order, ostream &out) const {
+	// Stop when the traversal passes a leaf node.
+	if (cur == NULL) return;
+	if (order == 1) {
+		// In-order traversal produces ascending student ids in a BST.
+		display2(cur->left, order, out);
+		cur->item.print(out);
+		display2(cur->right, order, out);
+	} else {
+		// Reverse in-order traversal produces descending student ids.
+		display2(cur->right, order, out);
+		cur->item.print(out);
+		display2(cur->left, order, out);
+	}
+}
 
+bool BST::display(int order, int source) {
+	// Reject an empty tree and unsupported parameter values.
+	if (empty()) return false;
+	if (order != 1 && order != 2) return false;
+	if (source == 1) {
+		// Send every record to the console.
+		display2(root, order, cout);
+		return true;
+	}
+	if (source == 2) {
+		// Use the same recursive traversal with a file output stream.
+		ofstream out("student-info.txt");
+		if (!out) return false;
+		display2(root, order, out);
+		return true;
+	}
+	return false;
+}
 
-//(d) clone subtree
-/*bool BST::CloneSubtree(BST t1, type item) {
-	BTNode	*subRoot;
+BTNode *BST::findNode(BTNode *cur, const type &item) const {
+	// Search only the possible branch by comparing the student id key.
+	if (cur == NULL) return NULL;
+	if (cur->item.id == item.id) return cur;
+	if (item.id < cur->item.id) return findNode(cur->left, item);
+	return findNode(cur->right, item);
+}
 
-	if (t1.root == NULL) return false;			
+BTNode *BST::cloneNode(const BTNode *cur) const {
+	// Recursively allocate a new node and copy both child subtrees.
+	if (cur == NULL) return NULL;
+	BTNode *copy = new BTNode(cur->item);
+	copy->left = cloneNode(cur->left);
+	copy->right = cloneNode(cur->right);
+	return copy;
+}
 
-	subRoot = search2(t1.root, item);		
-	if (subRoot == NULL) return false;		
+void BST::clear(BTNode *cur) {
+	// Delete children before their parent (post-order deletion).
+	if (cur == NULL) return;
+	clear(cur->left);
+	clear(cur->right);
+	delete cur;
+}
 
-	if (root != NULL) clear();			
+bool BST::CloneSubtree(BST t1, type item) {
+	// The assignment requires the destination tree to be empty before cloning.
+	if (!empty() || t1.empty()) return false;
 
-	root = clone2(subRoot);					
+	// Locate the requested subtree root in the source tree.
+	BTNode *subtreeRoot = findNode(t1.root, item);
+	if (subtreeRoot == NULL) return false;
+
+	// Deep-copy the subtree and recalculate the destination node count.
+	root = cloneNode(subtreeRoot);
 	count = 0;
-	countNode2(root, count);				
+	countNode2(root, count);
 	return true;
 }
 
+void BST::printPath2(BTNode *cur, int path[], int length) const {
+	// Add the current id to the root-to-current-node path.
+	if (cur == NULL) return;
+	path[length++] = cur->item.id;
 
-BTNode *BST::search2(BTNode *cur, type item) {
-	if (cur == NULL) return NULL;			
-
-	//if (cur->item == item)
-	if (cur->item.compare2(item)) return cur;	
-
-	//if (cur->item > item)
-	if (cur->item.compare1(item))				
-		return search2(cur->left, item);
-
-	return search2(cur->right, item);			
+	// A leaf completes one external path, so print the stored ids.
+	if (cur->left == NULL && cur->right == NULL) {
+		for (int i = 0; i < length; i++) {
+			if (i > 0) cout << "   ";
+			cout << path[i];
+		}
+		cout << endl;
+		return;
+	}
+	// Explore both branches; each recursive call receives its own length value.
+	printPath2(cur->left, path, length);
+	printPath2(cur->right, path, length);
 }
 
-
-BTNode *BST::clone2(BTNode *cur) {
-	BTNode	*newNode;
-
-	if (cur == NULL) return NULL;
-
-	newNode = new BTNode(cur->item);		
-	if (!newNode) return NULL;
-	newNode->left = clone2(cur->left);			
-	newNode->right = clone2(cur->right);
-	return newNode;
+bool BST::printPath() {
+	if (empty()) return false;
+	// A root-to-leaf path cannot contain more ids than the tree height.
+	int *path = new int[height(root)];
+	cout << "Below are all the external paths for the tree:\n\n";
+	printPath2(root, path, 0);
+	delete[] path;
+	return true;
 }
-*/
-
-
-
 
 
 

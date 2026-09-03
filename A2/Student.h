@@ -1,6 +1,8 @@
 #ifndef Student_type
 #define Student_type
 
+#include <cstring>
+#include <ostream>
 
 using namespace std;
 
@@ -12,7 +14,7 @@ struct Student{
 	char address[100];
 	char DOB[20];
 	char course[5];
-	char phone_no[10];
+	char phone_no[20];
 	double cgpa;
 	
 	Student();

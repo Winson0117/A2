@@ -8,12 +8,12 @@ using namespace std;
 
 Student::Student()
 {
-	strcpy(name, " ");
+	strcpy_s(name, " ");
 	id = 0;
-	strcpy(address, " ");
-	strcpy(DOB, " ");
-	strcpy(course, " ");
-	strcpy(phone_no, " ");
+	strcpy_s(address, " ");
+	strcpy_s(DOB, " ");
+	strcpy_s(course, " ");
+	strcpy_s(phone_no, " ");
 	cgpa = 0.0;
 
 }

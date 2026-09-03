@@ -45,7 +45,7 @@ bool Queue::dequeue(type2 &itemExtracted) {
 	count--;
 	itemExtracted = head->item;
 	head = head->next;
-	free(cur);
+	delete cur;
 	if (count == 0) tail = NULL;
 	return true;
 }

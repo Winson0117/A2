@@ -30,6 +30,9 @@ struct BST {
 
 		// basic functions for BST
 		BST();
+		BST(const BST &);
+		BST &operator=(const BST &);
+		~BST();
 		bool empty();
 		int size();
 		bool insert (type);		// insert an item into a BST
@@ -44,6 +47,19 @@ struct BST {
 		// sample operation (extra functions) - same as BT
 		int countNode();		// count number of tree nodes
 		bool findGrandsons(type);	// find the grandsons of an input father item
+
+		// Assignment 2 operations
+		bool display(int order, int source);
+		bool CloneSubtree(BST t1, type item);
+		bool printPath();
+
+	private:
+		int height(BTNode *) const;
+		void display2(BTNode *, int, std::ostream &) const;
+		BTNode *findNode(BTNode *, const type &) const;
+		BTNode *cloneNode(const BTNode *) const;
+		void clear(BTNode *);
+		void printPath2(BTNode *, int *, int) const;
 
 		
 	

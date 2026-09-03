@@ -305,6 +305,40 @@ void BST::display2(BTNode *cur, int order, ostream &out) const {
 	}
 }
 
+bool BST::deepestNodes() {
+	if (root == NULL) return false;
+
+	Queue q;
+	BTNode *cur;
+	BTNode *deepest[100];
+	int deepestCount = 0;
+
+	q.enqueue(root);
+
+	while (!q.empty()) {
+		int levelSize = q.size();
+		deepestCount = 0;
+
+		for (int i = 0; i < levelSize; i++) {
+			q.dequeue(cur);
+			deepest[deepestCount++] = cur;
+
+			if (cur->left != NULL) {
+				q.enqueue(cur->left);
+			}
+
+			if (cur->right != NULL) {
+				q.enqueue(cur->right);
+			}
+		}
+	}
+
+	for (int i = 0; i < deepestCount; i++) {
+		cout << deepest[i]->item.id << endl;
+	}
+	return true;
+}
+
 bool BST::display(int order, int source) {
 	// Reject an empty tree and unsupported parameter values.
 	if (empty()) return false;
@@ -361,6 +395,42 @@ bool BST::CloneSubtree(BST t1, type item) {
 	root = cloneNode(subtreeRoot);
 	count = 0;
 	countNode2(root, count);
+	return true;
+}
+
+bool BST::printLevelNodes() {
+	if (root == NULL) return false;
+
+	Queue q;
+	BTNode* cur;
+
+	q.enqueue(root);
+
+	int level = 1;
+
+	while (!q.empty()) {
+		int levelSize = q.size();
+		cout << "Level " << level << " nodes: ";
+
+		for (int i = 0; i < levelSize; i++) {
+			q.dequeue(cur);
+			cout << cur->item.id;
+
+			if (i < levelSize - 1) {
+				cout << " ";
+			}
+
+			if (cur->left != NULL) {
+				q.enqueue(cur->left);
+			}
+
+			if (cur->right != NULL) {
+				q.enqueue(cur->right);
+			}
+		}
+		cout << endl;
+		level++;
+	}
 	return true;
 }
 

@@ -49,8 +49,10 @@ struct BST {
 		bool findGrandsons(type);	// find the grandsons of an input father item
 
 		// Assignment 2 operations
+		bool deepestNodes();
 		bool display(int order, int source);
 		bool CloneSubtree(BST t1, type item);
+		bool printLevelNodes();
 		bool printPath();
 
 	private:

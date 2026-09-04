@@ -31,8 +31,9 @@ int main() {
 			break;
 		}
 		case 2:
-			// deepestNodes() is intentionally excluded from this first merge.
-			cout << "deepestNodes() has not been merged yet.\n";
+			if (!t1.deepestNodes()) {
+        		cout << "The tree is empty.\n";
+			}
 			break;
 		case 3: {
 			int order, source;
@@ -57,7 +58,9 @@ int main() {
 			break;
 		}
 		case 5:
-			cout << "printLevelNodes() has not been merged yet.\n";
+			if (!t1.printLevelNodes()) {
+				cout << "The tree is empty.\n";
+			}
 			break;
 		case 6:
 			if (!t1.printPath()) cout << "The tree is empty.\n";
